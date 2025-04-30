@@ -2,13 +2,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
 import flashcardRoutes from './routes/flashcards';
+import bodyParser from 'body-parser';
 
 console.log('Loaded ENV:', process.env.DB_SERVER);
 
-dotenv.config();
-
 const app = express();
 app.use(express.json());
+app.use(bodyParser.json());
 
 app.use('/flashcards', flashcardRoutes);
 

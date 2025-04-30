@@ -1,16 +1,18 @@
 import express from 'express';
-import { pool } from '../db';
+import { getAllFlashcards, createFlashcard } from '../repositories/flashcardRepository';
 
 const router = express.Router();
 
-router.get('/', async (_req, res) => {
-  try {
-    const db = await pool;
-    const result = await db.request().query('SELECT * FROM Flashcards');
-    res.json(result.recordset);
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch flashcards' });
-  }
+router.get('/', async (req, res) => {
+  const flashcards = await getAllFlashcards();
+  res.json(flashcards);
+});
+
+router.post('/', async (req, res) => {
+  const { front, back } = req.body;
+  await createFlashcard(front, back);
+  res.status(201).send('Flashcard created');
 });
 
 export default router;
+

@@ -1,32 +1,27 @@
 import sql from 'mssql';
 
-const config: sql.config = {
-  server: process.env.DB_SERVER as string,
-  database: process.env.DB_NAME,
+const dbConfig: sql.config = {
+  server: process.env.DB_SERVER!,
+  database: process.env.DB_NAME!,
+  user: process.env.DB_USER!,
+  password: process.env.DB_PASS!,
   options: {
     encrypt: false,
-    trustServerCertificate: true,
-  },
-  authentication: {
-    type: 'ntlm',
-    options: {
-      domain: process.env.DB_DOMAIN || '',
-      userName: process.env.DB_WIN_USER || '',
-      password: process.env.DB_WIN_PASS || '',
-    },
-  },
+    trustServerCertificate: true
+  }
 };
 
-console.log('DB Config:', config);
+console.log('DB Config:', dbConfig);
 
-export const pool = new sql.ConnectionPool(config)
+export const pool = new sql.ConnectionPool(dbConfig)
   .connect()
   .then(pool => {
-    console.log('Connected to SQL Server with Windows Authentication');
+    console.log('✅ Connected to SQL Server with SQL Authentication');
     return pool;
   })
   .catch(err => {
-    console.error('Database Connection Failed!', err);
+    console.error('❌ Database Connection Failed!', err);
     throw err;
   });
+
 
