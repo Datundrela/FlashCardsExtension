@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Learner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app-container">
+        <h1>Flashcard Learner</h1>
+
+        <div class="day-display">
+            <span id="day-counter">Day 0</span>
+        </div>
+
+        
+        <div id="flashcard-area" class="hidden">
+            <div id="card">
+                <div id="card-front" class="card-face">
+                    
+                </div>
+                <div id="card-back" class="card-face hidden">
+                    
+                </div>
+            </div>
+            <div id="controls">
+                <button id="reveal-btn">Reveal Answer</button>
+                <div id="feedback-controls" class="hidden">
+                    <button id="incorrect-btn" class="feedback-btn incorrect">Incorrect</button>
+                    <button id="correct-btn" class="feedback-btn correct">Correct</button>
+                    
+                </div>
+            </div>
+             <div id="loading-indicator" class="hidden">Loading...</div>
+        </div>
+
+        
+        <div id="start-finish-area">
+            <p id="message">No cards to practice today!</p>
+            <button id="next-day-btn">Start Practice / Go to Next Day</button>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

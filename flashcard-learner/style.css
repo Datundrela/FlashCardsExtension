@@ -1,0 +1,118 @@
+body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh; 
+    background-color: #f0f2f5; 
+    margin: 0;
+}
+
+#app-container {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    min-width: 350px;
+    max-width: 500px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.day-display {
+    margin-bottom: 25px;
+    font-size: 1.1em;
+    color: #555;
+}
+
+#day-counter {
+    background-color: #e7e9fc; 
+    color: #4a56e2; 
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-weight: bold;
+}
+
+#flashcard-area {
+    margin-bottom: 20px;
+}
+
+#card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 40px 20px; 
+    min-height: 150px; 
+    display: flex; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 1.4em; 
+    position: relative; 
+    word-wrap: break-word; 
+    overflow-wrap: break-word;
+}
+
+.card-face {
+    width: 100%;
+}
+
+#controls {
+    margin-top: 20px;
+    min-height: 40px; 
+}
+
+#feedback-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px; 
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #4a56e2; 
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #3b46b4; 
+}
+
+.feedback-btn.correct {
+    background-color: #28a745; 
+}
+.feedback-btn.correct:hover {
+    background-color: #218838;
+}
+
+.feedback-btn.incorrect {
+    background-color: #dc3545; 
+}
+.feedback-btn.incorrect:hover {
+    background-color: #c82333;
+}
+
+
+#start-finish-area {
+    padding: 20px 0;
+}
+
+#message {
+    color: #6c757d;
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+.hidden {
+    display: none;
+}
