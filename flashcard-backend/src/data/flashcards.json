@@ -1,0 +1,9 @@
+[
+  {
+    "id": "a9abfa6f-f858-4254-8678-80675d8e2ff9",
+    "createdAt": "2025-05-01T12:16:12.023Z",
+    "front": "Closure",
+    "back": "A closure is the combination of a function and the lexical environment within which that function was declared.",
+    "difficulty": "new"
+  }
+]

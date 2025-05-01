@@ -9,6 +9,7 @@ import {
 
 const router = express.Router();
 
+// GET /flashcards/
 router.get('/', async (req, res) => {
   const flashcards = await getAllFlashcards();
   res.json(flashcards);
@@ -23,25 +24,26 @@ router.get('/:id', async (req, res) => {
   res.json(flashcard);
 })
 
-// GET /api/flashcards/hard
+// GET /flashcards/hard
 router.get('/filter/hard', async (req, res) => {
   const hardFlashcards = await getFlashcardsByDifficulty('hard');
   res.json(hardFlashcards);
 });
 
-// GET /api/flashcards/easy
+// GET /flashcards/easy
 router.get('/filter/easy', async (req, res) => {
   const easyFlashcards = await getFlashcardsByDifficulty('easy');
   res.json(easyFlashcards);
 });
 
+// POST /flashcards/
 router.post('/', async (req, res) => {
   const { front, back } = req.body;
   await createFlashcard(front, back);
   res.status(201).send('Flashcard created');
 });
 
-// PATCH /api/flashcards/:id/difficulty
+// PATCH /flashcards/:id/difficulty
 router.patch('/:id/difficulty', async (req, res) => {
   const { difficulty } = req.body;
   await updateFlashcardDifficulty(req.params.id, difficulty);

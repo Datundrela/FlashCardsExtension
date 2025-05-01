@@ -1,4 +1,4 @@
-type Difficulty = "new" | "easy" | "hard";
+export type Difficulty = "new" | "easy" | "hard";
 
 
 /**
