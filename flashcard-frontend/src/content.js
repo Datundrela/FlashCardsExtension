@@ -1,92 +1,115 @@
+
+let flashcardButton = null;
+
+function removeFlashcardButton() {
+    if (flashcardButton && flashcardButton.parentNode) {
+        console.log("Removing flashcard button.");
+        flashcardButton.remove();
+        flashcardButton = null; 
+    }
+}
+
 document.addEventListener('selectionchange', function(event) {
     const selectedText = window.getSelection().toString().trim();
+
     if (selectedText) {
-        
+
         const selection = window.getSelection();
+        if (selection.rangeCount === 0) {
+            removeFlashcardButton(); 
+            return;
+        }
         const range = selection.getRangeAt(0);
-        const rect = range.getBoundingClientRect(); 
-        
-        const existingButtons = document.querySelectorAll('.flashcard-button');
-        existingButtons.forEach(button => button.remove());
+        const rect = range.getBoundingClientRect();
 
-        const button = document.createElement('button');
-        button.textContent = 'Save as Flashcard';
-        button.style.position = 'absolute';
-        button.style.left = `${rect.left + window.scrollX}px`;  
-        button.style.top = `${rect.bottom + window.scrollY + 5}px`;  
-        button.style.zIndex = '99999999'; 
-        button.style.padding = '5px 10px';
-        button.style.fontSize = '12px';
-        button.style.border = 'none';
-        button.style.borderRadius = '5px';
-        button.style.backgroundColor = 'red';
-        button.style.color = 'white';
-        button.style.cursor = 'pointer';
-        
-        button.classList.add('flashcard-button');
+        if (!flashcardButton) {
+            console.log("Creating flashcard button for selected text.");
+            flashcardButton = document.createElement('button');
+            flashcardButton.textContent = 'Save as Flashcard';
+            flashcardButton.style.position = 'absolute';
+            flashcardButton.style.zIndex = '2147483647'; 
+            flashcardButton.style.padding = '5px 10px';
+            flashcardButton.style.fontSize = '12px';
+            flashcardButton.style.border = 'none';
+            flashcardButton.style.borderRadius = '5px';
+            flashcardButton.style.backgroundColor = 'red';
+            flashcardButton.style.color = 'white';
+            flashcardButton.style.cursor = 'pointer';
+            flashcardButton.style.boxShadow = '2px 2px 5px rgba(0,0,0,0.3)'; 
+            flashcardButton.classList.add('flashcard-button'); 
 
-        console.log(button);
-        document.body.appendChild(button);
+            flashcardButton.addEventListener('click', function(clickEvent) {
+                clickEvent.stopPropagation();
 
-        button.addEventListener('click', function() {
-            console.log('Selected Text: ', selectedText);
-            chrome.storage.local.set({ selectedText: selectedText });
+                console.log('Button clicked. Selected Text: ', selectedText);
 
-            window.getSelection().removeAllRanges();
+                openFlashcardWindow(selectedText); 
 
-            button.remove();    
+                window.getSelection().removeAllRanges();
+                removeFlashcardButton();
+            });
 
-            openFlashcardWindow(selectedText);
+            document.body.appendChild(flashcardButton);
+        }
 
-        });
+        const scrollX = window.scrollX;
+        const scrollY = window.scrollY;
+        flashcardButton.style.left = `${rect.left + scrollX}px`;
+        flashcardButton.style.top = `${rect.bottom + scrollY + 5}px`; 
+
+    } else {
+        removeFlashcardButton();
     }
 });
 
+document.addEventListener('mousedown', function(event) {
+    if (flashcardButton && !flashcardButton.contains(event.target)) {
+        console.log("Clicked outside the button, removing selection and button.");
+        if (window.getSelection().toString().trim().length > 0) {
+             window.getSelection().removeAllRanges(); 
+        }
+        removeFlashcardButton(); 
+    }
+}, true);
 
-// Function to open a new window for flashcard creation
-// Function to open a new window for flashcard creation
+
 function openFlashcardWindow(selectedText) {
-    console.log("Opening flashcard window for text:", selectedText); // Log input
-
-    // --- Pass data via sessionStorage ---
-    // Use sessionStorage because it's isolated per session and cleared when tab/window closes
+    console.log("Opening flashcard window for text:", selectedText);
     try {
-        // Clear any previous value first in case of errors
         sessionStorage.removeItem('flashcardSelectedText');
-        sessionStorage.setItem('flashcardSelectedText', selectedText || ''); // Store the text, handle null/undefined
+        sessionStorage.setItem('flashcardSelectedText', selectedText || '');
         console.log("Stored selectedText in sessionStorage.");
     } catch (e) {
         console.error("Failed to set sessionStorage:", e);
-        // Handle potential storage errors (e.g., disabled, quota exceeded)
-        alert("Could not store selected text for the new window. Please copy/paste manually.");
-        // Optionally, don't open the window or open it without pre-filled text
-        // return;
+        alert("Could not store selected text for the new window.");
     }
 
-
-    // --- Open the new window ---
-    const newWindow = window.open("", "Flashcard Window", "width=400,height=350,top=100,left=100,resizable=yes,scrollbars=yes"); // Added resizable/scrollbars
-
+    const newWindow = window.open("", "Flashcard Window", "width=400,height=350,top=100,left=100,resizable=yes,scrollbars=yes");
     if (!newWindow) {
-        alert("Failed to open new window. Please check your browser's popup blocker settings.");
+        alert("Failed to open new window. Check popup blockers.");
         return;
     }
     console.log("New window opened:", newWindow);
 
-    // --- Write HTML structure WITHOUT inline script ---
-    // Get the correct URL for the script within the extension package
-    // IMPORTANT: Adjust the path 'src/popup/create-flashcard-logic.js' if your file is elsewhere!
-    const scriptURL = chrome.runtime.getURL('src/create-flashcard-logic.js');
-    console.log("Script URL for new window:", scriptURL);
+    let scriptURL;
+    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.getURL) {
+         scriptURL = chrome.runtime.getURL('src/create-flashcard-logic.js');
+         console.log("Script URL for new window:", scriptURL);
+    } else {
+        console.error("chrome.runtime.getURL is not available in this context. Cannot load script.");
+        newWindow.document.write("<body>Error: Could not load necessary script.</body>");
+        newWindow.document.close();
+        return;
+    }
+
 
     newWindow.document.write(`
-        <!DOCTYPE html> <!-- Add doctype -->
+        <!DOCTYPE html>
         <html>
             <head>
-                <meta charset="UTF-8"> <!-- Add charset -->
+                <meta charset="UTF-8">
                 <title>Create Flashcard</title>
                 <style>
-                    /* Use the same styles as before */
                     body { font-family: Arial, sans-serif; padding: 20px; min-width: 300px; }
                     label { display: block; margin-bottom: 3px; font-weight: bold; }
                     input { width: 95%; margin-bottom: 10px; padding: 8px; border-radius: 3px; border: 1px solid #ddd; box-sizing: border-box; }
@@ -98,7 +121,6 @@ function openFlashcardWindow(selectedText) {
             <body>
                 <h2>Create Flashcard</h2>
                 <label for="front">Front:</label>
-                <!-- The value will now be set by the external script after reading sessionStorage -->
                 <input type="text" id="front" value="" placeholder="Enter the front of the flashcard">
                 <label for="back">Back:</label>
                 <input type="text" id="back" placeholder="Enter the back of the flashcard">
@@ -107,15 +129,10 @@ function openFlashcardWindow(selectedText) {
                 <br><br>
                 <button id="save">Save</button>
                 <button id="clear">Clear</button>
-
-                <!-- Load the script externally using its extension URL -->
                 <script src="${scriptURL}" defer></script>
-
             </body>
         </html>
     `);
-
-    // Close the document stream (important after document.write)
     newWindow.document.close();
     console.log("Finished writing content to new window.");
 }
