@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "FlashCard Extension",
+  "version": "1.0",
+  "description": "A flashcard browser extension built with Vite and Vanilla JS.",
+  "action": {
+    "default_popup": "src/popup.html"
+  },
+  "permissions": [
+    "storage"
+  ]
+}
