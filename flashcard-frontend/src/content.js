@@ -39,18 +39,30 @@ document.addEventListener('selectionchange', function(event) {
             flashcardButton.classList.add('flashcard-button'); 
 
             flashcardButton.addEventListener('click', function(clickEvent) {
-                clickEvent.stopPropagation();
+                clickEvent.stopPropagation(); // Prevent triggering document click
 
-                console.log('Button clicked. Selected Text: ', selectedText);
+                // *** FIX: Get the CURRENT selection text INSIDE the click handler ***
+                const currentSelectedTextOnClick = window.getSelection().toString().trim();
 
-                openFlashcardWindow(selectedText); 
+                // Check if something is actually selected AT THE MOMENT OF CLICK
+                if (!currentSelectedTextOnClick) {
+                    console.log("Button clicked, but selection disappeared.");
+                    removeFlashcardButton(); // Remove button if selection is gone
+                    return; // Don't proceed
+                }
 
+                console.log('Button clicked. Using text selected at click time: ', currentSelectedTextOnClick);
+
+                // Call openFlashcardWindow with the text selected *now*
+                openFlashcardWindow(currentSelectedTextOnClick);
+
+                // Remove selection and button after action
                 window.getSelection().removeAllRanges();
                 removeFlashcardButton();
             });
 
             document.body.appendChild(flashcardButton);
-        }
+        } // End of if (!flashcardButton) block
 
         const scrollX = window.scrollX;
         const scrollY = window.scrollY;
@@ -123,7 +135,7 @@ function openFlashcardWindow(selectedText) {
                 <label for="front">Front:</label>
                 <input type="text" id="front" value="" placeholder="Enter the front of the flashcard">
                 <label for="back">Back:</label>
-                <input type="text" id="back" placeholder="Enter the back of the flashcard">
+                <input type="text" id="back" value="${selectedText}" placeholder="Enter the back of the flashcard">
                 <label for="hint">Hint (Optional):</label>
                 <input type="text" id="hint" placeholder="Enter an optional hint">
                 <br><br>
