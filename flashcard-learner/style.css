@@ -1,26 +1,39 @@
+
+
+
 body {
-    font-family: sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; /* Common system font stack */
     display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 90vh; 
+    align-items: flex-start; 
+    min-height: 95vh; 
     background-color: #f0f2f5; 
     margin: 0;
+    padding: 20px 10px; 
+    box-sizing: border-box;
 }
 
 #app-container {
     background-color: #ffffff;
     padding: 30px 40px;
     border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12); 
     text-align: center;
     min-width: 350px;
     max-width: 500px;
+    width: 90%; 
 }
 
+
 h1 {
-    color: #333;
+    color: #1c1e21; 
     margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+p {
+    line-height: 1.5;
+    color: #333;
 }
 
 .day-display {
@@ -30,89 +43,160 @@ h1 {
 }
 
 #day-counter {
-    background-color: #e7e9fc; 
-    color: #4a56e2; 
-    padding: 5px 12px;
+    background-color: #e7f3ff; 
+    color: #1877f2; 
+    padding: 6px 14px;
     border-radius: 15px;
-    font-weight: bold;
+    font-weight: 600; 
+    display: inline-block; 
 }
+
+#gesture-area {
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #ddd; 
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    margin-bottom: 15px; 
+}
+
+#gesture-area p#gesture-status {
+    font-size: 0.95em;
+    color: #555;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 360px; 
+    margin: 0 auto 10px auto;
+    aspect-ratio: 4 / 3; 
+    background-color: #e9ecef; 
+    border-radius: 6px; 
+    overflow: hidden; 
+}
+
+#webcam, #output-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px; 
+}
+
+#webcam {
+    transform: scaleX(-1);
+    object-fit: cover; 
+}
+
+#output-canvas {
+    z-index: 10; 
+    pointer-events: none; 
+}
+
 
 #flashcard-area {
     margin-bottom: 20px;
 }
 
 #card {
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
+    background-color: #fff; 
+    border: 1px solid #e0e0e0; 
     border-radius: 8px;
-    padding: 40px 20px; 
-    min-height: 150px; 
-    display: flex; 
+    padding: 30px 20px; 
+    min-height: 160px;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
-    font-size: 1.4em; 
-    position: relative; 
-    word-wrap: break-word; 
+    font-size: 1.5em; 
+    position: relative;
+    word-wrap: break-word;
     overflow-wrap: break-word;
+    color: #1c1e21;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .card-face {
     width: 100%;
 }
 
+#loading-indicator {
+    font-style: italic;
+    color: #6c757d;
+    padding: 10px 0;
+}
+
+
 #controls {
     margin-top: 20px;
-    min-height: 40px; 
-}
-
-#feedback-controls {
     display: flex;
     justify-content: center;
-    gap: 15px; 
+    align-items: center;
+    gap: 12px; 
+    flex-wrap: wrap; 
 }
 
+
 button {
-    padding: 10px 20px;
+    padding: 10px 22px; 
     font-size: 1em;
+    font-weight: 600;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    background-color: #4a56e2; 
+    background-color: #1877f2; 
     color: white;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, filter 0.2s ease;
+    text-align: center;
+    line-height: 1.2; 
 }
 
 button:hover {
-    background-color: #3b46b4; 
+    filter: brightness(0.9); 
 }
 
-.feedback-btn.correct {
-    background-color: #28a745; 
-}
-.feedback-btn.correct:hover {
-    background-color: #218838;
-}
-
-.feedback-btn.incorrect {
-    background-color: #dc3545; 
-}
-.feedback-btn.incorrect:hover {
-    background-color: #c82333;
+button:disabled {
+    background-color: #bcc0c4; 
+    color: #f0f2f5;
+    cursor: not-allowed;
+    filter: none; 
 }
 
+#controls #enable-webcam-button,
+#start-finish-area #start-enable-webcam-button {
+    background-color: #ffc107; 
+    color: #333;
+}
+
+#controls #disable-webcam-button {
+    background-color: #6c757d; 
+}
 
 #start-finish-area {
     padding: 20px 0;
 }
 
 #message {
-    color: #6c757d;
+    color: #1c1e21; 
     font-size: 1.1em;
     margin-bottom: 20px;
 }
 
+.start-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+
 .hidden {
-    display: none;
+    display: none !important; 
 }

@@ -5,45 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flashcard Learner</title>
     <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.9/wasm/vision_wasm_internal.js"></script>
 </head>
 <body>
 
     <div id="app-container">
+
         <h1>Flashcard Learner</h1>
 
         <div class="day-display">
             <span id="day-counter">Day 0</span>
         </div>
 
-        
+        <div id="gesture-area" class="hidden">
+             <p id="gesture-status">Gesture Control Inactive</p>
+             <div id="live-view" class="video-container">
+                 <video id="webcam" autoplay playsinline></video>
+                 <canvas class="output-canvas" id="output-canvas"></canvas>
+             </div>
+        </div>
+
         <div id="flashcard-area" class="hidden">
             <div id="card">
                 <div id="card-front" class="card-face">
-                    
                 </div>
                 <div id="card-back" class="card-face hidden">
-                    
                 </div>
             </div>
+
+            <div id="loading-indicator" class="hidden">Loading...</div>
+
             <div id="controls">
                 <button id="reveal-btn">Reveal Answer</button>
-                <div id="feedback-controls" class="hidden">
-                    <button id="incorrect-btn" class="feedback-btn incorrect">Incorrect</button>
-                    <button id="correct-btn" class="feedback-btn correct">Correct</button>
-                    
-                </div>
+                <button id="enable-webcam-button" type="button" class="hidden">Enable Gestures</button>
+                <button id="disable-webcam-button" type="button" class="hidden">Stop Gestures</button>
             </div>
-             <div id="loading-indicator" class="hidden">Loading...</div>
         </div>
 
-        
         <div id="start-finish-area">
             <p id="message">No cards to practice today!</p>
-            <button id="next-day-btn">Start Practice / Go to Next Day</button>
+            <div class="start-controls">
+                <button id="next-day-btn">Start Practice / Go to Next Day</button>
+                <button id="start-enable-webcam-button" type="button">Enable Webcam</button>
+            </div>
         </div>
 
-    </div>
-
-    <script src="script.js"></script>
+    </div> 
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.9"></script>
+    <script src="gesture-recognizer.js" type="module"></script>
+    <script src="script.js" type="module"></script>
 </body>
 </html>
